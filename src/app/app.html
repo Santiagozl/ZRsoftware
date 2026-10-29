@@ -1,0 +1,48 @@
+@if (adminMode()) {
+  <app-admin />
+} @else {
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <app-site-header />
+
+  <main id="contenido">
+    <app-hero appScrollReveal revealChildren=".hero-copy, .hero-visual" [revealStagger]="140" />
+    <app-services
+      appScrollReveal
+      revealChildren=".section-heading, .service-card"
+      [revealStagger]="90"
+    />
+    <app-projects
+      appScrollReveal
+      revealChildren=".section-heading, .project-card"
+      [revealStagger]="110"
+    />
+    <app-delivery-process
+      appScrollReveal
+      revealChildren=".statement > p, .process-heading, .process-list article"
+      [revealStagger]="90"
+    />
+    <app-experience
+      appScrollReveal
+      revealChildren=".solutions-copy, .solution-item"
+      [revealStagger]="90"
+    />
+    <app-founders
+      appScrollReveal
+      revealChildren=".team-heading, .profile-card"
+      [revealStagger]="130"
+    />
+    <app-tech-stack
+      appScrollReveal
+      revealChildren=".tech-intro, .tech-group"
+      [revealStagger]="75"
+    />
+    <app-faq appScrollReveal revealChildren=".faq-title, .faq-list article" [revealStagger]="70" />
+    <app-contact
+      appScrollReveal
+      revealChildren=".contact-copy, .contact-form"
+      [revealStagger]="140"
+    />
+  </main>
+
+  <app-site-footer appScrollReveal revealChildren=".footer-top, .footer-bottom" />
+}

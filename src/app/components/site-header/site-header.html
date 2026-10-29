@@ -1,0 +1,34 @@
+<header class="site-header">
+  <a class="brand" href="#inicio" aria-label="ZR Software, ir al inicio" (click)="closeMenu()">
+    <span class="brand-mark" aria-hidden="true"><span>Z</span><i></i><span>R</span></span>
+    <span class="brand-name">ZR <b>Software</b></span>
+  </a>
+
+  <button
+    class="menu-toggle"
+    type="button"
+    [class.is-open]="menuOpen()"
+    [attr.aria-expanded]="menuOpen()"
+    aria-controls="main-navigation"
+    aria-label="Abrir menú"
+    (click)="toggleMenu()"
+  >
+    <span></span><span></span>
+  </button>
+
+  <nav
+    id="main-navigation"
+    class="main-nav"
+    [class.is-open]="menuOpen()"
+    aria-label="Navegación principal"
+  >
+    <a href="#servicios" (click)="closeMenu()">Servicios</a>
+    <a href="#proyectos" (click)="closeMenu()">Proyectos</a>
+    <a href="#enfoque" (click)="closeMenu()">Proceso</a>
+    <a href="#equipo" (click)="closeMenu()">Nosotros</a>
+    <a class="nav-cta" href="#contacto" (click)="closeMenu()">
+      Hablemos
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5" /></svg>
+    </a>
+  </nav>
+</header>

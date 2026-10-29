@@ -1,0 +1,23 @@
+<section class="tech-section" id="tecnologias">
+  <div class="tech-intro">
+    <span class="section-number light">06 / CAPACIDAD TECNOLÓGICA</span>
+    <h2>Stack para construir,<br />integrar y <em>operar.</em></h2>
+    <p>
+      Cubrimos el ciclo completo del producto: interfaces, servicios, aplicaciones móviles,
+      persistencia, automatización y despliegue. La selección final depende de los requisitos de
+      rendimiento, seguridad, mantenimiento y costo.
+    </p>
+  </div>
+  <div class="tech-groups">
+    @for (group of groups; track group.label) {
+      <div class="tech-group">
+        <span>{{ group.label }}</span>
+        <div>
+          @for (technology of group.technologies; track technology) {
+            <strong>{{ technology }}</strong>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</section>

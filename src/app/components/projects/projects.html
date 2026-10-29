@@ -1,0 +1,60 @@
+<section class="section projects" id="proyectos">
+  <div class="section-heading projects-heading">
+    <div>
+      <span class="section-number">02 / PROYECTOS</span>
+      <h2>Software construido<br />para operar en <em>producción.</em></h2>
+    </div>
+    <p>
+      Casos propios y experiencia técnica aplicada por nuestro equipo. El contexto de cada
+      participación se identifica para diferenciar los productos de ZR de la trayectoria previa del
+      equipo.
+    </p>
+  </div>
+
+  @if (content.loading()) {
+    <div class="projects-loading">Cargando proyectos…</div>
+  } @else {
+    <div class="project-showcase">
+      @for (project of content.projects(); track project.id; let index = $index) {
+        <article
+          class="project-card"
+          [class.accent-green]="project.accent === 'green'"
+          [class.accent-dark]="project.accent === 'dark'"
+          [class.accent-light]="project.accent === 'light'"
+        >
+          <div
+            class="project-visual"
+            [class.has-image]="project.imageUrl"
+            [style.background-image]="project.imageUrl ? 'url(' + project.imageUrl + ')' : null"
+          >
+            @if (!project.imageUrl) {
+              <div class="project-matrix" aria-hidden="true">
+                <span>{{ (index + 1).toString().padStart(2, '0') }}</span>
+                <div><i></i><i></i><i></i></div>
+                <strong>&lt;/&gt;</strong>
+              </div>
+            }
+            <span class="project-context">{{ project.context }}</span>
+            <span class="project-year">{{ project.year }}</span>
+          </div>
+          <div class="project-copy">
+            <span>{{ project.category }}</span>
+            <h3>{{ project.title }}</h3>
+            <p>{{ project.summary }}</p>
+            <div class="project-stack">
+              @for (technology of project.technologies; track technology) {
+                <span>{{ technology }}</span>
+              }
+            </div>
+          </div>
+        </article>
+      } @empty {
+        <div class="projects-empty">
+          <span>PORTAFOLIO EN CONSTRUCCIÓN</span>
+          <h3>El próximo caso puede ser el tuyo.</h3>
+          <a href="#contacto">Hablemos de tu proyecto →</a>
+        </div>
+      }
+    </div>
+  }
+</section>

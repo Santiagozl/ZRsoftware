@@ -1,0 +1,23 @@
+<section class="section faq">
+  <div class="faq-title">
+    <span class="section-number">07 / PREGUNTAS FRECUENTES</span>
+    <h2>Antes de empezar.</h2>
+  </div>
+  <div class="faq-list">
+    @for (item of questions; track item.question; let index = $index) {
+      <article [class.is-open]="openQuestion() === index">
+        <button
+          type="button"
+          (click)="toggle(index)"
+          [attr.aria-expanded]="openQuestion() === index"
+        >
+          <span>{{ item.question }}</span
+          ><i></i>
+        </button>
+        <div class="answer">
+          <p>{{ item.answer }}</p>
+        </div>
+      </article>
+    }
+  </div>
+</section>

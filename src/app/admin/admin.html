@@ -1,0 +1,218 @@
+<main class="admin-shell">
+  <header class="admin-header">
+    <a class="admin-brand" href="/"><span>ZR</span> / CONTENT</a>
+    @if (authenticated()) {
+      <button type="button" class="text-button" (click)="logout()">Cerrar sesión</button>
+    }
+  </header>
+
+  @if (checkingSession()) {
+    <section class="state-card"><p>Verificando sesión…</p></section>
+  } @else if (!content.configured) {
+    <section class="state-card setup-card">
+      <span class="state-index">CONFIGURACIÓN REQUERIDA</span>
+      <h1>Conecta el administrador.</h1>
+      <p>
+        El panel está listo. Agrega la URL y la clave pública de Supabase en
+        <code>src/environments/environment.ts</code> y ejecuta la migración incluida en
+        <code>supabase/schema.sql</code>.
+      </p>
+      <a href="/">Volver al portafolio</a>
+    </section>
+  } @else if (!authenticated()) {
+    <section class="login-card">
+      <div>
+        <span class="state-index">ACCESO PRIVADO</span>
+        <h1>Administra el contenido.</h1>
+        <p>Publica proyectos y revisa las ideas enviadas desde el portafolio.</p>
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <label>
+          <span>Correo</span>
+          <input type="email" formControlName="email" autocomplete="email" />
+        </label>
+        <label>
+          <span>Contraseña</span>
+          <input type="password" formControlName="password" autocomplete="current-password" />
+        </label>
+        @if (error()) {
+          <p class="form-error">{{ error() }}</p>
+        }
+        <button class="primary-button" type="submit">Ingresar <span>→</span></button>
+      </form>
+    </section>
+  } @else {
+    <section class="admin-content">
+      <div class="admin-title">
+        <div>
+          <span class="state-index">PANEL DE CONTENIDO</span>
+          <h1>Portafolio ZR.</h1>
+        </div>
+        <nav aria-label="Secciones del administrador">
+          <button
+            type="button"
+            [class.active]="activeTab() === 'projects'"
+            (click)="setTab('projects')"
+          >
+            Proyectos <span>{{ content.projects().length }}</span>
+          </button>
+          <button
+            type="button"
+            [class.active]="activeTab() === 'messages'"
+            (click)="setTab('messages')"
+          >
+            Mensajes <span>{{ content.messages().length }}</span>
+          </button>
+        </nav>
+      </div>
+
+      @if (notice()) {
+        <div class="notice success">{{ notice() }}</div>
+      }
+      @if (error()) {
+        <div class="notice error">{{ error() }}</div>
+      }
+
+      @if (activeTab() === 'projects') {
+        <div class="project-admin-grid">
+          <form class="editor" [formGroup]="projectForm" (ngSubmit)="save()">
+            <div class="editor-heading">
+              <div>
+                <span>{{ editingId() ? 'EDITANDO PROYECTO' : 'NUEVO PROYECTO' }}</span>
+                <h2>
+                  {{ editingId() ? projectForm.controls.title.value : 'Agregar al portafolio' }}
+                </h2>
+              </div>
+              @if (editingId()) {
+                <button type="button" class="text-button" (click)="startNew()">Cancelar</button>
+              }
+            </div>
+
+            <div class="form-grid">
+              <label class="field-wide">
+                <span>Título *</span>
+                <input formControlName="title" (input)="createSlug()" />
+              </label>
+              <label>
+                <span>Slug *</span>
+                <input formControlName="slug" />
+              </label>
+              <label>
+                <span>Categoría *</span>
+                <input formControlName="category" placeholder="Aplicación web" />
+              </label>
+              <label class="field-wide">
+                <span>Resumen *</span>
+                <textarea formControlName="summary" rows="4"></textarea>
+                <small>{{ projectForm.controls.summary.value.length }}/280</small>
+              </label>
+              <label>
+                <span>Contexto *</span>
+                <select formControlName="context">
+                  <option>Proyecto de ZR Software</option>
+                  <option>Proyecto interno</option>
+                  <option>Experiencia del equipo</option>
+                </select>
+              </label>
+              <label>
+                <span>Año</span>
+                <input type="number" formControlName="year" />
+              </label>
+              <label class="field-wide">
+                <span>Tecnologías</span>
+                <input
+                  formControlName="technologies"
+                  placeholder="Angular, Spring Boot, PostgreSQL"
+                />
+              </label>
+              <label>
+                <span>Estilo visual</span>
+                <select formControlName="accent">
+                  <option value="green">Verde</option>
+                  <option value="light">Claro</option>
+                  <option value="dark">Oscuro</option>
+                </select>
+              </label>
+              <label>
+                <span>Orden</span>
+                <input type="number" formControlName="displayOrder" />
+              </label>
+              <label class="field-wide">
+                <span>URL de imagen</span>
+                <input type="url" formControlName="imageUrl" />
+              </label>
+              <label class="upload field-wide">
+                <span>O cargar imagen</span>
+                <input type="file" accept="image/*" (change)="uploadImage($event)" />
+              </label>
+              <label class="check">
+                <input type="checkbox" formControlName="featured" />
+                <span>Proyecto destacado</span>
+              </label>
+              <label class="check">
+                <input type="checkbox" formControlName="published" />
+                <span>Visible en el sitio</span>
+              </label>
+            </div>
+            <button class="primary-button" type="submit" [disabled]="saving()">
+              {{ saving() ? 'Guardando…' : editingId() ? 'Guardar cambios' : 'Publicar proyecto' }}
+              <span>→</span>
+            </button>
+          </form>
+
+          <div class="content-list">
+            <div class="list-heading">
+              <h2>Contenido</h2>
+              <button type="button" class="text-button" (click)="startNew()">+ Nuevo</button>
+            </div>
+            @for (project of content.projects(); track project.id) {
+              <article>
+                <div class="project-state" [class.draft]="!project.published"></div>
+                <div>
+                  <span>{{ project.context }} · {{ project.year }}</span>
+                  <h3>{{ project.title }}</h3>
+                  <p>{{ project.category }}</p>
+                </div>
+                <div class="row-actions">
+                  <button type="button" (click)="edit(project)">Editar</button>
+                  <button type="button" class="danger" (click)="remove(project)">Eliminar</button>
+                </div>
+              </article>
+            } @empty {
+              <p class="empty">Todavía no hay proyectos.</p>
+            }
+          </div>
+        </div>
+      } @else {
+        <div class="message-list">
+          @for (message of content.messages(); track message.id) {
+            <article>
+              <div class="message-meta">
+                <span>{{ message.createdAt | date: 'dd MMM yyyy, HH:mm' }}</span>
+                <select
+                  [value]="message.status"
+                  (change)="changeMessageStatus(message, $any($event.target).value)"
+                >
+                  <option value="new">Nuevo</option>
+                  <option value="contacted">Contactado</option>
+                  <option value="closed">Cerrado</option>
+                </select>
+              </div>
+              <h2>{{ message.name }}</h2>
+              <p class="message-contact">
+                <a [href]="'mailto:' + message.email">{{ message.email }}</a>
+                @if (message.company) {
+                  <span>· {{ message.company }}</span>
+                }
+              </p>
+              <strong>{{ message.projectType }}</strong>
+              <p>{{ message.message }}</p>
+            </article>
+          } @empty {
+            <p class="empty">Aún no hay mensajes desde el formulario.</p>
+          }
+        </div>
+      }
+    </section>
+  }
+</main>
