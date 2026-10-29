@@ -1454,7 +1454,10 @@ h1 {
   padding: clamp(5.5rem, 8vw, 8rem) clamp(1.25rem, 5vw, 6rem);
   display: grid;
   grid-template-columns: minmax(320px, 0.78fr) minmax(420px, 1.22fr);
-  gap: clamp(3rem, 6vw, 7rem);
+  grid-template-areas:
+    'intro globe'
+    'groups groups';
+  gap: clamp(2.5rem, 5vw, 5rem) clamp(3rem, 6vw, 7rem);
   align-items: center;
   color: var(--white);
   background:
@@ -1463,6 +1466,8 @@ h1 {
 }
 
 .tech-intro {
+  grid-area: intro;
+
   h2 {
     margin: 2rem 0 1.8rem;
     font-size: clamp(2.7rem, 4.2vw, 4.8rem);
@@ -1486,7 +1491,8 @@ h1 {
 
 .stack-globe {
   position: relative;
-  width: min(100%, 600px);
+  grid-area: globe;
+  width: min(100%, 560px);
   aspect-ratio: 1;
   justify-self: center;
 }
@@ -1558,6 +1564,43 @@ h1 {
     text-shadow: 0 0 12px rgb(158 255 0 / 18%);
     will-change: transform, opacity;
     transform: translate(-50%, -50%);
+  }
+}
+
+.tech-groups {
+  grid-area: groups;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem 1.8rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid rgb(255 255 255 / 12%);
+}
+
+.tech-group {
+  min-width: 0;
+
+  > span {
+    display: block;
+    margin-bottom: 0.7rem;
+    color: var(--green);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+  }
+
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  strong {
+    padding: 0.48rem 0.62rem;
+    border: 1px solid rgb(255 255 255 / 14%);
+    color: rgb(255 255 255 / 78%);
+    font:
+      500 0.72rem / 1 'Space Grotesk',
+      sans-serif;
   }
 }
 
@@ -2046,6 +2089,17 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .tech-section {
+    grid-template-areas:
+      'intro'
+      'globe'
+      'groups';
+  }
+
+  .tech-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .tech-intro,
   .contact-copy {
     max-width: 760px;
@@ -2311,6 +2365,10 @@ footer {
 
   .tech-cloud strong {
     font-size: 0.74rem;
+  }
+
+  .tech-groups {
+    grid-template-columns: 1fr;
   }
 
   .contact {

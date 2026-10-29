@@ -39,4 +39,17 @@
       }
     </div>
   </div>
+
+  <div class="tech-groups">
+    @for (group of groups; track group.label) {
+      <div class="tech-group">
+        <span>{{ group.label }}</span>
+        <div>
+          @for (technology of group.technologies; track technology) {
+            <strong>{{ technology }}</strong>
+          }
+        </div>
+      </div>
+    }
+  </div>
 </section>
