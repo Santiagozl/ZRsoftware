@@ -8,16 +8,35 @@
       rendimiento, seguridad, mantenimiento y costo.
     </p>
   </div>
-  <div class="tech-groups">
-    @for (group of groups; track group.label) {
-      <div class="tech-group">
-        <span>{{ group.label }}</span>
-        <div>
-          @for (technology of group.technologies; track technology) {
-            <strong>{{ technology }}</strong>
+
+  <div class="stack-globe" (pointermove)="onPointerMove($event)" (pointerleave)="onPointerLeave()">
+    <div class="globe-space" aria-hidden="true">
+      @for (star of stars; track $index) {
+        <i
+          class="globe-star"
+          [style.top]="star.top"
+          [style.left]="star.left"
+          [style.width.px]="star.size"
+          [style.height.px]="star.size"
+          [style.animation-delay]="star.delay"
+        ></i>
+      }
+      <div class="wire-globe">
+        <div class="wire-spin">
+          @for (angle of meridians; track angle) {
+            <i class="wire-ring" [style.transform]="'rotateY(' + angle + 'deg)'"></i>
+          }
+          @for (angle of latitudes; track angle) {
+            <i class="wire-ring" [style.transform]="'rotateX(' + angle + 'deg)'"></i>
           }
         </div>
       </div>
-    }
+    </div>
+
+    <div class="tech-cloud">
+      @for (technology of technologies; track technology) {
+        <strong>{{ technology }}</strong>
+      }
+    </div>
   </div>
 </section>
